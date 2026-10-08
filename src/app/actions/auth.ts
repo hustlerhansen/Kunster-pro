@@ -26,7 +26,7 @@ function safeNext(value: FormDataEntryValue | null, fallback = "/konto"): string
 export async function signIn(_prev: ActionState, formData: FormData): Promise<ActionState> {
   if (!isSupabaseConfigured()) return NOT_CONFIGURED;
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  if (!(await rateLimitByIp("login", 10, 600)) || !(await rateLimitByIp(`login:${email}`, 8, 600))) {
+  if (!(await rateLimitByIp("login", 30, 600)) || !(await rateLimitByIp(`login:${email}`, 8, 600))) {
     return { ok: false, message: "For mange innloggingsforsøk. Vent noen minutter og prøv igjen." };
   }
   const supabase = await createClient();

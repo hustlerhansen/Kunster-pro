@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   const to = process.env.ADMIN_NOTIFICATION_EMAIL;
   const { data } = await createAdminClient()
     .from("product_variants")
-    .select("sku, name, stock_available, min_stock, product:products!inner(name, status)")
+    .select("sku, name, stock_available, min_stock, product:products!product_variants_product_id_fkey!inner(name, status)")
     .eq("is_active", true)
     .eq("product.status", "active");
   const low = ((data ?? []) as unknown as { sku: string; name: string; stock_available: number; min_stock: number; product: { name: string } }[])

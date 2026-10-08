@@ -20,7 +20,7 @@ export function MobileMenu() {
   ];
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className="rounded-md p-2 lg:hidden" aria-label="Åpne meny">
+      <SheetTrigger className="-ml-1 shrink-0 rounded-md p-1.5 lg:hidden" aria-label="Åpne meny">
         <Menu className="size-6" />
       </SheetTrigger>
       <SheetContent side="left">

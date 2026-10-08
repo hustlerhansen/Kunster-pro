@@ -65,7 +65,7 @@ export async function loadPricingVariants(
   const { data, error } = await createPublicClient()
     .from("product_variants")
     .select(
-      "id, sku, name, price_ore, vat_rate, stock_available, weight_g, is_active, product:products!inner(id, slug, name, status, category_id, images:product_images(url, sort_order))",
+      "id, sku, name, price_ore, vat_rate, stock_available, weight_g, is_active, product:products!product_variants_product_id_fkey!inner(id, slug, name, status, category_id, images:product_images(url, sort_order))",
     )
     .in("id", ids);
   if (error) throw new Error(`Kunne ikke hente priser: ${error.message}`);

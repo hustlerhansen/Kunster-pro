@@ -83,7 +83,9 @@ export default async function AdminProfitability({ searchParams }: PageProps<"/a
             <tbody className="divide-y">
               {rows.map((r) => (
                 <tr key={r.product_id}>
-                  <td className="py-2">{r.product_name}</td>
+                  <td className="py-2">
+                    {r.product_name} {Number(r.cogs_ore) === 0 && <Badge variant="warning">Mangler kostpris</Badge>}
+                  </td>
                   <td className="py-2 text-right">{r.units_sold}</td>
                   <td className="py-2 text-right">{formatPrice(Number(r.revenue_ex_vat_ore))}</td>
                   <td className="py-2 text-right">{formatPrice(Number(r.cogs_ore))}</td>

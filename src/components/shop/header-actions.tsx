@@ -51,7 +51,7 @@ function Action({ href, icon: Icon, label, badge }: { href?: string; icon: typeo
       <span className="hidden text-xs font-medium sm:block">{label}</span>
     </>
   );
-  const cls = "flex flex-col items-center gap-1 rounded-md px-2 py-1 text-ink transition-colors hover:text-gold-dark";
+  const cls = "flex flex-col items-center gap-1 rounded-md px-1.5 py-1 text-ink transition-colors hover:text-gold-dark sm:px-2";
   return href ? (
     <Link href={href} className={cls}>
       {inner}
@@ -65,7 +65,7 @@ export function HeaderActions() {
   const { loggedIn, isStaff, name } = useSessionInfo();
   const { count, ready, setOpen } = useCart();
   return (
-    <div className="flex items-center gap-1 sm:gap-3">
+    <div className="flex items-center gap-0.5 pr-1.5 sm:gap-3 sm:pr-0">
       {isStaff && <Action href="/admin" icon={LayoutDashboard} label="Admin" />}
       <Action href={loggedIn ? "/konto" : "/logg-inn"} icon={User} label={loggedIn ? (name ? `Hei, ${name}` : "Min konto") : "Logg inn"} />
       <span className="hidden md:block">
@@ -74,7 +74,7 @@ export function HeaderActions() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex flex-col items-center gap-1 rounded-md px-2 py-1 text-ink transition-colors hover:text-gold-dark"
+        className="flex flex-col items-center gap-1 rounded-md px-1.5 py-1 text-ink transition-colors hover:text-gold-dark sm:px-2"
         aria-label={`Handlekurv, ${count} varer`}
         data-testid="cart-button"
       >

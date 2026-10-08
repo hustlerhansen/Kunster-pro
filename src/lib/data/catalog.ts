@@ -21,7 +21,7 @@ export const PRODUCT_SELECT = `
   category:categories(id, slug, name),
   brand:brands(id, slug, name, is_house_brand),
   images:product_images(id, url, alt, sort_order, is_placeholder),
-  variants:product_variants(id, product_id, sku, name, options, price_ore, vat_rate, weight_g, color_hex, stock_on_hand, stock_reserved, stock_available, min_stock, is_active, sort_order),
+  variants:product_variants!product_variants_product_id_fkey(id, product_id, sku, name, options, price_ore, vat_rate, weight_g, color_hex, stock_on_hand, stock_reserved, stock_available, min_stock, is_active, sort_order),
   bundle_items:bundle_items(variant_id, quantity)
 `;
 

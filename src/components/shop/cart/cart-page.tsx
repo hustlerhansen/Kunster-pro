@@ -21,7 +21,7 @@ const ISSUE_TEXT = {
 };
 
 export function CartPageClient() {
-  const { items, ready, update, remove, discountCode, setDiscountCode, shippingCode, setShippingCode } = useCart();
+  const { items, ready, update, remove, discountCode, setDiscountCode, setShippingCode } = useCart();
   const { totals, loading, error } = usePricedCart();
   const [codeInput, setCodeInput] = useState(discountCode);
 

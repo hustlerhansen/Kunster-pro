@@ -20,7 +20,7 @@ export default async function AdminProducts({ searchParams }: PageProps<"/admin/
   const supabase = await createClient();
   let query = supabase
     .from("products")
-    .select("id, name, slug, status, is_demo, featured, product_type, category:categories(name), variants:product_variants(price_ore, stock_available, stock_on_hand, is_active)")
+    .select("id, name, slug, status, is_demo, featured, product_type, category:categories(name), variants:product_variants!product_variants_product_id_fkey(price_ore, stock_available, stock_on_hand, is_active)")
     .order("sort_order")
     .limit(500);
   if (q) query = query.ilike("name", `%${q.replace(/[%_]/g, "")}%`);

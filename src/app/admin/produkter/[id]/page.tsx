@@ -21,7 +21,7 @@ export default async function EditProduct({ params, searchParams }: PageProps<"/
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const supabase = await createClient();
   const [{ data: product }, { data: categories }, { data: brands }, { data: suppliers }, settings] = await Promise.all([
-    supabase.from("products").select("*, images:product_images(*), variants:product_variants(*, cost:variant_costs(*))").eq("id", id).maybeSingle(),
+    supabase.from("products").select("*, images:product_images(*), variants:product_variants!product_variants_product_id_fkey(*, cost:variant_costs(*))").eq("id", id).maybeSingle(),
     supabase.from("categories").select("id, name").order("sort_order"),
     supabase.from("brands").select("id, name").order("name"),
     supabase.from("suppliers").select("id, name, currency").eq("is_active", true).order("name"),

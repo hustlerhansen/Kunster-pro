@@ -7,6 +7,7 @@ import { signOut } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = { title: "Min side", robots: { index: false } };
+export const dynamic = "force-dynamic";
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   if (!isSupabaseConfigured()) {

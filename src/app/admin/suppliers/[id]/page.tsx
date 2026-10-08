@@ -19,9 +19,9 @@ export default async function SupplierDetail({ params }: PageProps<"/admin/suppl
     supabase.from("suppliers").select("*").eq("id", id).maybeSingle(),
     supabase
       .from("supplier_products")
-      .select("*, variant:product_variants(sku, name, product:products(name)), history:supplier_price_history(purchase_price, currency, recorded_at)")
+      .select("*, variant:product_variants(sku, name, product:products!product_variants_product_id_fkey(name)), history:supplier_price_history(purchase_price, currency, recorded_at)")
       .eq("supplier_id", id),
-    supabase.from("product_variants").select("id, sku, name, product:products(name)").order("sku"),
+    supabase.from("product_variants").select("id, sku, name, product:products!product_variants_product_id_fkey(name)").order("sku"),
     supabase.from("purchase_orders").select("id, po_number, status, expected_at, created_at").eq("supplier_id", id).order("created_at", { ascending: false }).limit(20),
   ]);
   if (!supplier) notFound();

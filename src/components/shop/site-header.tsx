@@ -13,9 +13,9 @@ export function SiteHeader() {
       <DemoNotice />
       <TopBanner />
       <div className="bg-white">
-        <div className="container-page flex items-center gap-3 py-4 lg:gap-10 lg:py-5">
+        <div className="container-page flex items-center gap-2 py-4 sm:gap-3 lg:gap-10 lg:py-5">
           <MobileMenu />
-          <Logo className="shrink-0" />
+          <Logo className="min-w-0 shrink" />
           <SearchForm className="mx-auto hidden max-w-xl md:flex" />
           <div className="ml-auto md:ml-0">
             <HeaderActions />

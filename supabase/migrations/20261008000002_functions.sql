@@ -81,15 +81,16 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- Kunder kan ikke endre egen rolle, bedriftstilknytning eller sperrestatus
+-- NB: security invoker (ikke definer) slik at current_user viser hvilken rolle som gjør endringen.
 create or replace function public.protect_profile_fields()
 returns trigger
 language plpgsql
-security definer
 set search_path = public
 as $$
 begin
-  -- service_role (server) og administratorer kan endre alt
-  if coalesce(auth.role(), '') = 'service_role' or public.is_admin() then
+  -- Kun API-rollene anon/authenticated begrenses. service_role (server), postgres (SQL-editor)
+  -- og administratorer kan endre alt.
+  if current_user not in ('anon', 'authenticated') or public.is_admin() then
     return new;
   end if;
   if new.role is distinct from old.role
@@ -248,6 +249,36 @@ end;
 $$;
 
 -- ---------------------------------------------------------------------
+-- Kostpris per variant. Malersett uten egen kostprofil får kostnaden summert
+-- fra komponentenes landed cost (bundle_items), slik at lønnsomhet ikke overdrives.
+-- ---------------------------------------------------------------------
+create or replace function public.variant_unit_cost(p_variant_id uuid)
+returns integer
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+begin
+  -- Kostpriser er forretningshemmeligheter: kun ansatte og serveren (eller interne kall) får svar.
+  -- session_user/auth.role() brukes fordi current_user er funksjonseier i security definer.
+  if coalesce(auth.role(), '') in ('anon', 'authenticated') and not public.is_staff() then
+    return null;
+  end if;
+  return coalesce(
+    (select vc.landed_cost_ore from public.variant_costs vc where vc.variant_id = p_variant_id),
+    (select sum(coalesce(c.landed_cost_ore, 0) * b.quantity)::integer
+       from public.product_variants v
+       join public.bundle_items b on b.bundle_product_id = v.product_id
+       left join public.variant_costs c on c.variant_id = b.variant_id
+      where v.id = p_variant_id
+      having count(c.variant_id) = count(*))
+  );
+end;
+$$;
+revoke all on function public.variant_unit_cost(uuid) from public, anon;
+
+-- ---------------------------------------------------------------------
 -- ORDRE: opprettelse med atomisk lagerreservasjon
 -- Låser variantradene (FOR UPDATE) i fast rekkefølge -> ingen oversalg
 -- ved samtidige ordre og ingen vranglås.
@@ -386,7 +417,7 @@ begin
     insert into public.order_item_costs (order_item_id, unit_cost_ore, unit_variable_cost_ore)
     values (
       v_item_id,
-      coalesce(v_cost.landed_cost_ore, 0),
+      coalesce(public.variant_unit_cost(v_variant.id), 0),
       coalesce(v_cost.packaging_per_unit_ore, 0)
         + round(v_expected_price * coalesce(v_cost.payment_fee_percent, 0) / 100.0)::integer
     );
@@ -911,12 +942,13 @@ select
   v.price_ore,
   v.vat_rate,
   round(v.price_ore / (1 + v.vat_rate / 100.0))::integer as price_ex_vat_ore,
-  vc.landed_cost_ore,
+  public.variant_unit_cost(v.id) as landed_cost_ore,
+  (vc.variant_id is null and public.variant_unit_cost(v.id) is not null) as cost_from_bundle,
   (coalesce(vc.packaging_per_unit_ore, 0)
     + round(round(v.price_ore / (1 + v.vat_rate / 100.0)) * coalesce(vc.payment_fee_percent, 0) / 100.0))::integer
     as variable_cost_ore,
   v.stock_on_hand,
-  (v.stock_on_hand * coalesce(vc.landed_cost_ore, 0))::bigint as stock_value_ore
+  (v.stock_on_hand * coalesce(public.variant_unit_cost(v.id), 0))::bigint as stock_value_ore
 from public.product_variants v
 join public.products p on p.id = v.product_id
 left join public.variant_costs vc on vc.variant_id = v.id;

@@ -16,14 +16,14 @@ export default async function PurchaseOrderDetail({ params }: PageProps<"/admin/
   const supabase = await createClient();
   const { data: po } = await supabase
     .from("purchase_orders")
-    .select("*, supplier:suppliers(id, name, currency), items:purchase_order_items(*, variant:product_variants(sku, name, product:products(name)))")
+    .select("*, supplier:suppliers(id, name, currency), items:purchase_order_items(*, variant:product_variants(sku, name, product:products!product_variants_product_id_fkey(name)))")
     .eq("id", id)
     .maybeSingle();
   if (!po) notFound();
   const supplier = po.supplier as { id: string; name: string; currency: string };
   const { data: supplierProducts } = await supabase
     .from("supplier_products")
-    .select("variant_id, purchase_price, variant:product_variants(sku, name, product:products(name))")
+    .select("variant_id, purchase_price, variant:product_variants(sku, name, product:products!product_variants_product_id_fkey(name))")
     .eq("supplier_id", supplier.id);
   const items = po.items as { id: string; quantity: number; unit_price: number; received_quantity: number; variant: { sku: string; name: string; product: { name: string } } }[];
   const goodsValue = items.reduce((s, i) => s + i.quantity * Number(i.unit_price), 0);

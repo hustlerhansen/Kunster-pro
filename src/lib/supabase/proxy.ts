@@ -8,7 +8,10 @@ import { isSupabaseConfigured, supabaseAnonKey, supabaseUrl } from "@/lib/env";
  */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
-  if (!isSupabaseConfigured()) return response;
+  if (!isSupabaseConfigured()) {
+    // Demomodus: kontosider krever database – send til innlogging (som viser forklaring)
+    return request.nextUrl.pathname.startsWith("/konto") ? redirectToLogin(request) : response;
+  }
 
   const path = request.nextUrl.pathname;
   const needsAuth = path.startsWith("/konto") || path.startsWith("/admin");

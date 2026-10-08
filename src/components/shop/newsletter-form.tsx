@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { subscribeNewsletter, type ActionState } from "@/app/actions/newsletter";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,7 @@ export function NewsletterForm({ source }: { source: string }) {
         <input type="checkbox" name="consent" required className="mt-0.5 accent-[#D4AF65]" />
         <span>
           Ja, jeg samtykker til å motta nyhetsbrev og tilbud på e-post fra Kunstner Pro. Samtykket kan trekkes tilbake når som helst.
-          Se <a href="/personvern" className="underline">personvernerklæringen</a>.
+          Se <Link href="/personvern" className="underline">personvernerklæringen</Link>.
         </span>
       </label>
       {state.message && (

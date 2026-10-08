@@ -14,7 +14,7 @@ export default async function PriceGroupPrices({ params }: PageProps<"/admin/pri
   const supabase = await createClient();
   const [{ data: group }, { data: variants }, { data: prices }] = await Promise.all([
     supabase.from("price_groups").select("*").eq("id", id).maybeSingle(),
-    supabase.from("product_variants").select("id, sku, name, price_ore, product:products!inner(name, status)").eq("is_active", true).neq("product.status", "archived").order("sku"),
+    supabase.from("product_variants").select("id, sku, name, price_ore, product:products!product_variants_product_id_fkey!inner(name, status)").eq("is_active", true).neq("product.status", "archived").order("sku"),
     supabase.from("price_group_prices").select("variant_id, price_ore").eq("price_group_id", id),
   ]);
   if (!group) notFound();

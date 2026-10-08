@@ -69,7 +69,7 @@ export function PurchasePanel({ product }: { product: Product }) {
         <span className="text-muted-foreground">Varenr. {variant.sku}</span>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-2 sm:gap-3">
         <QuantityInput value={qty} onChange={setQty} max={max} />
         <AddToCartButton
           variantId={variant.id}
@@ -82,6 +82,7 @@ export function PurchasePanel({ product }: { product: Product }) {
             priceOre: variant.price_ore,
             imageUrl: product.images[0]?.url ?? null,
           }}
+          className="min-w-0 flex-1 px-3 sm:px-7"
         />
         <FavoriteButton productId={product.id} />
       </div>

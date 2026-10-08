@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export function Logo({ className, inverted = false }: { className?: string; inverted?: boolean }) {
   return (
     <Link href="/" aria-label="Kunstner Pro – til forsiden" className={cn("group inline-flex flex-col leading-none", className)}>
-      <span className={cn("flex items-baseline font-serif text-[1.65rem] font-bold tracking-tight sm:text-[2rem]", inverted ? "text-white" : "text-ink")}>
+      <span className={cn("flex items-baseline font-serif text-[1.35rem] font-bold tracking-tight sm:text-[2rem]", inverted ? "text-white" : "text-ink")}>
         Kunstner
         <span className="mx-[0.12em] inline-block size-[0.32em] translate-y-[-0.28em] rounded-full bg-gold" aria-hidden />
         Pro
@@ -14,7 +14,7 @@ export function Logo({ className, inverted = false }: { className?: string; inve
           <path d="M8 45 L13 47 Q12 56 3 58 Q7 51 8 45 Z" fill="#D4AF65" />
         </svg>
       </span>
-      <span className={cn("mt-1 text-[0.58rem] font-medium tracking-[0.32em] uppercase sm:text-[0.62rem]", inverted ? "text-white/70" : "text-ink/70")}>
+      <span className={cn("mt-1 text-[0.5rem] font-medium tracking-[0.22em] uppercase sm:text-[0.62rem] sm:tracking-[0.32em]", inverted ? "text-white/70" : "text-ink/70")}>
         Oljemaling &amp; Kunstmateriell
       </span>
     </Link>

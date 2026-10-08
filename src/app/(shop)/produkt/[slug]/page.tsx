@@ -77,7 +77,7 @@ export default async function ProductPage({ params }: PageProps<"/produkt/[slug]
         items={[...(product.category ? [{ label: product.category.name, href: `/${product.category.slug}` }] : []), { label: product.name }]}
       />
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-14">
+      <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14 [&>*]:min-w-0">
         {/* Bilder */}
         <div className="space-y-3">
           <div className="relative overflow-hidden rounded-lg border border-border bg-[#F6F4EF]">
@@ -155,7 +155,7 @@ export default async function ProductPage({ params }: PageProps<"/produkt/[slug]
       </div>
 
       {/* Beskrivelse og spesifikasjoner */}
-      <div className="mt-16 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+      <div className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-[1.4fr_1fr] [&>*]:min-w-0">
         <section aria-labelledby="beskrivelse">
           <h2 id="beskrivelse" className="mb-4 text-2xl font-semibold">
             Produktbeskrivelse
