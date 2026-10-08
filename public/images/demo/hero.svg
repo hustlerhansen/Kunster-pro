@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img">
+<defs>
+<radialGradient id="h-bg" cx="70%" cy="45%" r="80%"><stop offset="0" stop-color="#3B2F25"/><stop offset=".55" stop-color="#17130F"/><stop offset="1" stop-color="#0B0A09"/></radialGradient>
+<filter id="h-paint" x="-10%" y="-10%" width="120%" height="120%">
+<feTurbulence type="fractalNoise" baseFrequency=".018 .09" numOctaves="3" seed="7" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="38" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="grain"/>
+<feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.1" result="g2"/>
+<feComposite in="d" in2="g2" operator="in"/>
+</filter>
+<filter id="h-soft"><feGaussianBlur stdDeviation="40"/></filter>
+<linearGradient id="h-fade" x1="0" x2="1"><stop offset="0" stop-color="#0B0A09" stop-opacity=".98"/><stop offset=".42" stop-color="#0B0A09" stop-opacity=".78"/><stop offset=".7" stop-color="#0B0A09" stop-opacity=".1"/><stop offset="1" stop-color="#0B0A09" stop-opacity="0"/></linearGradient>
+<linearGradient id="h-metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3F3F1"/><stop offset=".45" stop-color="#B9BABC"/><stop offset=".55" stop-color="#E9E9E7"/><stop offset="1" stop-color="#8C8E92"/></linearGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#h-bg)"/>
+<ellipse cx="1150" cy="420" rx="420" ry="260" fill="#D4AF65" opacity=".12" filter="url(#h-soft)"/>
+<g filter="url(#h-paint)">
+<path d="M 700 260 C 900 180 1150 210 1520 140 L 1560 250 C 1200 320 950 300 740 380 Z" fill="#1F3A93"/>
+<path d="M 760 360 C 980 300 1250 330 1580 270 L 1590 360 C 1290 420 1000 400 780 470 Z" fill="#E9E2D0"/>
+<path d="M 720 470 C 960 420 1200 470 1560 410 L 1580 520 C 1250 570 960 540 740 600 Z" fill="#D4AF65"/>
+<path d="M 800 590 C 1020 560 1260 600 1590 540 L 1600 650 C 1290 700 1030 680 820 720 Z" fill="#8A3B1E"/>
+<path d="M 900 700 C 1100 680 1350 720 1600 690 L 1600 800 C 1350 820 1120 800 920 820 Z" fill="#2F6B2F" opacity=".85"/>
+<path d="M 1000 200 C 1150 160 1300 190 1450 150 L 1460 200 C 1300 240 1160 220 1010 250 Z" fill="#F2C230" opacity=".9"/>
+</g>
+<g transform="translate(1190 610) rotate(-24)">
+<rect x="-230" y="-48" width="420" height="96" rx="10" fill="url(#h-metal)"/>
+<rect x="-170" y="-46" width="290" height="92" fill="#F7F4EC"/>
+<rect x="-170" y="-46" width="290" height="22" fill="#111"/>
+<rect x="60" y="-24" width="60" height="70" fill="#1F3A93"/>
+<text x="-155" y="-29" font-family="Georgia, serif" font-size="13" fill="#D4AF65" letter-spacing="3">KUNSTNER PRO</text>
+<text x="-155" y="12" font-family="Georgia, serif" font-size="30" fill="#111">Oil Colour</text>
+<rect x="190" y="-26" width="70" height="52" rx="6" fill="#111"/>
+</g>
+<g transform="translate(1000 300) rotate(36)">
+<path d="M 0 -12 L -70 -15 Q -95 0 -70 15 L 0 12 Z" fill="#C79A5B"/>
+<rect x="0" y="-14" width="60" height="28" fill="url(#h-metal)"/>
+<path d="M 60 -14 L 520 -8 Q 540 0 520 8 L 60 14 Z" fill="#1A1A1A"/>
+</g>
+<rect width="1600" height="900" fill="url(#h-fade)"/>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 700" role="img">
+<defs>
+<radialGradient id="kmed-bg" cx="50%" cy="35%" r="80%"><stop offset="0" stop-color="#3A3129"/><stop offset=".6" stop-color="#1A1613"/><stop offset="1" stop-color="#0D0B0A"/></radialGradient>
+<linearGradient id="kmed-metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3F3F1"/><stop offset=".45" stop-color="#C9CACC"/><stop offset=".55" stop-color="#E9E9E7"/><stop offset="1" stop-color="#9C9EA2"/></linearGradient>
+<linearGradient id="kmed-black" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A3A3A"/><stop offset="1" stop-color="#050505"/></linearGradient>
+<linearGradient id="kmed-fade" x1="0" y1="0" x2="0" y2="1"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".75"/></linearGradient>
+<filter id="kmed-shadow"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="600" height="700" fill="url(#kmed-bg)"/>
+<g transform="translate(-40 40) scale(.8)"><defs><linearGradient id="kmed-glass" x1="0" x2="1"><stop offset="0" stop-color="#c4951d"/><stop offset=".35" stop-color="#ffdb63"/><stop offset=".7" stop-color="#E2B33B"/><stop offset="1" stop-color="#b5860e"/></linearGradient></defs>
+<ellipse cx="330" cy="625" rx="150" ry="22" fill="#000" opacity=".22" filter="url(#kmed-shadow)"/>
+<path d="M 210 360 Q 210 300 280 285 L 280 230 L 380 230 L 380 285 Q 450 300 450 360 L 450 610 Q 450 625 435 625 L 225 625 Q 210 625 210 610 Z" fill="url(#kmed-glass)" opacity=".92"/>
+<rect x="272" y="155" width="116" height="85" rx="8" fill="url(#kmed-black)"/>
+<line x1="280" y1="160" x2="280" y2="235" stroke="#333" stroke-width="3"/><line x1="292.5" y1="160" x2="292.5" y2="235" stroke="#333" stroke-width="3"/><line x1="305" y1="160" x2="305" y2="235" stroke="#333" stroke-width="3"/><line x1="317.5" y1="160" x2="317.5" y2="235" stroke="#333" stroke-width="3"/><line x1="330" y1="160" x2="330" y2="235" stroke="#333" stroke-width="3"/><line x1="342.5" y1="160" x2="342.5" y2="235" stroke="#333" stroke-width="3"/><line x1="355" y1="160" x2="355" y2="235" stroke="#333" stroke-width="3"/><line x1="367.5" y1="160" x2="367.5" y2="235" stroke="#333" stroke-width="3"/><line x1="380" y1="160" x2="380" y2="235" stroke="#333" stroke-width="3"/>
+<rect x="230" y="410" width="200" height="150" fill="#FBFAF7"/>
+<rect x="230" y="410" width="200" height="26" fill="#111"/>
+<text x="330" y="428" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#D4AF65" letter-spacing="3">KUNSTNER PRO</text>
+<text x="330" y="490" text-anchor="middle" font-family="Georgia, serif" font-size="30" fill="#111">Linolje</text>
+<text x="330" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#555" letter-spacing="2">RAFFINERT</text>
+<path d="M 235 330 Q 238 480 240 600" stroke="#fff" stroke-width="10" opacity=".25" fill="none" stroke-linecap="round"/></g>
+<g transform="translate(250 120) scale(.62)"><defs><linearGradient id="kmed2-glass" x1="0" x2="1"><stop offset="0" stop-color="#ab6c0d"/><stop offset=".35" stop-color="#f1b253"/><stop offset=".7" stop-color="#C98A2B"/><stop offset="1" stop-color="#9c5d00"/></linearGradient></defs>
+<ellipse cx="330" cy="625" rx="150" ry="22" fill="#000" opacity=".22" filter="url(#kmed2-shadow)"/>
+<path d="M 210 360 Q 210 300 280 285 L 280 230 L 380 230 L 380 285 Q 450 300 450 360 L 450 610 Q 450 625 435 625 L 225 625 Q 210 625 210 610 Z" fill="url(#kmed2-glass)" opacity=".92"/>
+<rect x="272" y="155" width="116" height="85" rx="8" fill="url(#kmed2-black)"/>
+<line x1="280" y1="160" x2="280" y2="235" stroke="#333" stroke-width="3"/><line x1="292.5" y1="160" x2="292.5" y2="235" stroke="#333" stroke-width="3"/><line x1="305" y1="160" x2="305" y2="235" stroke="#333" stroke-width="3"/><line x1="317.5" y1="160" x2="317.5" y2="235" stroke="#333" stroke-width="3"/><line x1="330" y1="160" x2="330" y2="235" stroke="#333" stroke-width="3"/><line x1="342.5" y1="160" x2="342.5" y2="235" stroke="#333" stroke-width="3"/><line x1="355" y1="160" x2="355" y2="235" stroke="#333" stroke-width="3"/><line x1="367.5" y1="160" x2="367.5" y2="235" stroke="#333" stroke-width="3"/><line x1="380" y1="160" x2="380" y2="235" stroke="#333" stroke-width="3"/>
+<rect x="230" y="410" width="200" height="150" fill="#FBFAF7"/>
+<rect x="230" y="410" width="200" height="26" fill="#111"/>
+<text x="330" y="428" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#D4AF65" letter-spacing="3">KUNSTNER PRO</text>
+<text x="330" y="490" text-anchor="middle" font-family="Georgia, serif" font-size="30" fill="#111">Medium</text>
+<text x="330" y="525" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#555" letter-spacing="2">OLJEMALING</text>
+<path d="M 235 330 Q 238 480 240 600" stroke="#fff" stroke-width="10" opacity=".25" fill="none" stroke-linecap="round"/></g>
+<rect width="600" height="700" fill="url(#kmed-fade)"/>
+</svg>

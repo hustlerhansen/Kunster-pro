@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 700" role="img">
+<defs>
+<radialGradient id="kset-bg" cx="50%" cy="35%" r="80%"><stop offset="0" stop-color="#3A3129"/><stop offset=".6" stop-color="#1A1613"/><stop offset="1" stop-color="#0D0B0A"/></radialGradient>
+<linearGradient id="kset-metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3F3F1"/><stop offset=".45" stop-color="#C9CACC"/><stop offset=".55" stop-color="#E9E9E7"/><stop offset="1" stop-color="#9C9EA2"/></linearGradient>
+<linearGradient id="kset-black" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A3A3A"/><stop offset="1" stop-color="#050505"/></linearGradient>
+<linearGradient id="kset-fade" x1="0" y1="0" x2="0" y2="1"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".75"/></linearGradient>
+<filter id="kset-shadow"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="600" height="700" fill="url(#kset-bg)"/>
+<g transform="translate(-2 20) scale(.78)">
+<path d="M 70 300 L 730 300 L 760 640 L 40 640 Z" fill="#9A6A3C"/>
+<rect x="95" y="320" width="610" height="300" fill="#2B1D12"/>
+<g><rect x="115" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="115" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="115" y="455" width="50" height="40" fill="#F4F1EA"/></g><g><rect x="179" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="179" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="179" y="455" width="50" height="40" fill="#F2C230"/></g><g><rect x="243" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="243" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="243" y="455" width="50" height="40" fill="#C9962E"/></g><g><rect x="307" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="307" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="307" y="455" width="50" height="40" fill="#D9541E"/></g><g><rect x="371" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="371" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="371" y="455" width="50" height="40" fill="#B0202A"/></g><g><rect x="435" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="435" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="435" y="455" width="50" height="40" fill="#7A1F4F"/></g><g><rect x="499" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="499" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="499" y="455" width="50" height="40" fill="#3B2F8F"/></g><g><rect x="563" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="563" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="563" y="455" width="50" height="40" fill="#1F3A93"/></g><g><rect x="627" y="345" width="50" height="190" rx="5" fill="url(#kset-metal)"/><rect x="627" y="385" width="50" height="110" fill="#FBFAF7"/><rect x="627" y="455" width="50" height="40" fill="#1E7A6F"/></g>
+</g>
+<rect width="600" height="700" fill="url(#kset-fade)"/>
+</svg>
