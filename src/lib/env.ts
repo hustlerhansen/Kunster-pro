@@ -41,4 +41,6 @@ export const integrations = {
   cron: () => has("CRON_SECRET"),
 };
 
-export const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "";
+const rawGa = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "";
+/** GA4-ID valideres for å hindre injeksjon i inline-skriptet. */
+export const gaMeasurementId = /^G-[A-Z0-9]{4,20}$/.test(rawGa) ? rawGa : "";

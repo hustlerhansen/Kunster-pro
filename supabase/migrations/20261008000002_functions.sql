@@ -280,7 +280,7 @@ begin
 
   -- Prisgruppe for bedriftskunde
   if payload ->> 'company_id' is not null then
-    select c.price_group_id, coalesce(pg.discount_percent, 0)
+    select pg.id, coalesce(pg.discount_percent, 0)
       into v_price_group, v_group_discount
     from public.companies c
     left join public.price_groups pg on pg.id = c.price_group_id and pg.is_active
@@ -353,7 +353,7 @@ begin
       where price_group_id = v_price_group and variant_id = v_variant.id;
     end if;
     if v_expected_price is null then
-      v_expected_price := round(v_variant.price_ore * (1 - v_group_discount / 100.0))::integer;
+      v_expected_price := round(v_variant.price_ore * (100 - v_group_discount) / 100.0)::integer;
     end if;
     if (v_item ->> 'unit_price_ore')::integer <> v_expected_price then
       raise exception 'PRICE_MISMATCH:%', v_variant.sku;

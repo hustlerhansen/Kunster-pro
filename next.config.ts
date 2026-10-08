@@ -20,6 +20,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  experimental: {
+    // Produktbilder lastes opp via server actions (maks 5 MB per bilde)
+    serverActions: { bodySizeLimit: "6mb" },
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     dangerouslyAllowSVG: true,
