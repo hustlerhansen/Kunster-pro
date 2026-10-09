@@ -29,18 +29,8 @@ test.skip(!process.env.E2E_FULLSTACK, "Krever E2E_FULLSTACK=1 og tilkoblet datab
 const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL ?? "http://x", env.SUPABASE_SERVICE_ROLE_KEY ?? "x", { auth: { persistSession: false } });
 const stamp = Date.now();
 
-/** Gyldig (mod11) organisasjonsnummer, unikt per testkjøring. */
-function orgNumber(): string {
-  const w = [3, 2, 7, 6, 5, 4, 3, 2];
-  for (let n = 0; n < 1000; n++) {
-    const base = String(800000000 + ((stamp + n * 7919) % 99999999)).slice(0, 8);
-    const sum = w.reduce((s, x, i) => s + x * Number(base[i]), 0);
-    const c = (11 - (sum % 11)) % 11;
-    if (c !== 10) return base + c;
-  }
-  throw new Error("fant ikke orgnr");
-}
-const ORG = orgNumber();
+/** Kjent organisasjonsnummer som mock-Enhetsregisteret (tests/mocks/services.mjs) godkjenner. */
+const ORG = "914778271";
 const customer = { name: "Kari Kunstner", email: `kari.${stamp}@test.no`, password: "Malerpensel2026" };
 const adminUser = { email: `admin.${stamp}@test.no`, password: "AdminPassord2026" };
 
@@ -62,6 +52,13 @@ test.describe.serial("Full kundereise og administrasjon", () => {
   test.beforeAll(async () => {
     // Nullstill rate limiting fra tidligere testkjøringer (samme IP)
     await admin.from("rate_limits").delete().neq("key", "");
+    await admin.from("credit_applications").delete().eq("org_number", ORG);
+    const { data: old } = await admin.from("companies").select("id").eq("org_number", ORG).maybeSingle();
+    if (old) {
+      await admin.from("invoices").delete().eq("company_id", old.id); // fakturaer har ON DELETE RESTRICT mot bedrift
+      await admin.from("companies").delete().eq("id", old.id);
+    }
+    await fetch("http://localhost:4010/__reset", { method: "POST" });
   });
 
   test("registrering oppretter konto, profil og adresse", async ({ page }) => {
@@ -119,6 +116,7 @@ test.describe.serial("Full kundereise og administrasjon", () => {
   });
 
   test("kortbetaling som ikke kan startes markerer IKKE ordren som betalt og frigjør lager", async ({ page }) => {
+    await fetch("http://localhost:4010/__mode", { method: "POST", body: JSON.stringify({ stripe: "fail" }) });
     await login(page, customer.email, customer.password, "/produkt/oppspent-lerret-bomull");
     await page.getByTestId("variant-option").filter({ hasText: "40 × 50 cm" }).click();
     await page.getByTestId("add-to-cart").click();
@@ -132,6 +130,7 @@ test.describe.serial("Full kundereise og administrasjon", () => {
     expect(after).toEqual(before);
     const { data: orders } = await admin.from("orders").select("status, payment_status").eq("email", customer.email).order("created_at", { ascending: false }).limit(1);
     expect(orders?.[0]).toEqual({ status: "cancelled", payment_status: "failed" });
+    await fetch("http://localhost:4010/__mode", { method: "POST", body: JSON.stringify({ stripe: "ok" }) });
   });
 
   test("Stripe-webhook med gyldig signatur bekrefter betaling; ugyldig signatur avvises", async ({ request }) => {

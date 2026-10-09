@@ -64,6 +64,9 @@ export async function reviewApplication(_prev: ActionState, formData: FormData):
               phone: app.phone,
               billing_address: app.billing_address,
               delivery_address: app.delivery_address,
+              brreg_status: app.brreg_status,
+              brreg_name: app.brreg_name,
+              brreg_checked_at: app.brreg_checked_at,
               created_by: userId,
             })
             .select("id")

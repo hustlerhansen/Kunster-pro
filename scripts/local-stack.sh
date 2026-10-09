@@ -75,6 +75,8 @@ DATABASE_URL="postgres://supabase_auth_admin:authadmin@127.0.0.1:5432/$DB?search
 GOTRUE_JWT_SECRET=$SECRET
 GOTRUE_JWT_EXP=3600
 GOTRUE_JWT_AUD=authenticated
+GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated
+GOTRUE_RATE_LIMIT_EMAIL_SENT=1000
 GOTRUE_JWT_ADMIN_ROLES=service_role
 API_EXTERNAL_URL=http://localhost:54321/auth/v1
 GOTRUE_API_HOST=127.0.0.1
@@ -115,6 +117,7 @@ JS
   reset)
     su postgres -c "psql -q -d $DB -c 'drop schema if exists public cascade; create schema public; grant all on schema public to postgres, anon, authenticated, service_role; delete from auth.users;'"
     load_schema
+    sleep 3  # PostgREST laster skjemaet på nytt
     echo "Migrasjoner og seed lastet."
     ;;
   env)

@@ -6,7 +6,12 @@ let client: Stripe | null = null;
 
 export function getStripe(): Stripe {
   if (!integrations.stripe()) throw new Error("Stripe er ikke konfigurert (STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET).");
-  client ??= new Stripe(process.env.STRIPE_SECRET_KEY!, { appInfo: { name: "Kunstner Pro" } });
+  // STRIPE_API_URL brukes kun i test (lokal etterligning av Stripe). Aldri satt i produksjon.
+  const override = process.env.STRIPE_API_URL && process.env.VERCEL_ENV !== "production" ? new URL(process.env.STRIPE_API_URL) : null;
+  client ??= new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    appInfo: { name: "Kunstner Pro" },
+    ...(override ? { protocol: (override.protocol === "https:" ? "https" : "http") as "http" | "https", host: override.hostname, port: override.port } : {}),
+  });
   return client;
 }
 

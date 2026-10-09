@@ -73,6 +73,7 @@ Testet mot ekte PostgreSQL 16 med Supabase Auth (GoTrue v2.180) og PostgREST v12
 | **Resend** | Ferdig bygget. Uten nøkkel logges e-poster som «skipped» |
 | **Bring/Posten og PostNord** | Konfigurerbare fraktmetoder, manuelt sporingsnummer og sporingslenker. **API-integrasjon (etiketter, hentesteder, automatisk sporing) er ikke bygget** og krever kundeavtale |
 | **Faktura/kreditt** | Teknisk ferdig, men sperret med `FEATURE_BUSINESS_INVOICE=false`. KID, purring, inkasso og regnskapseksport mangler |
+| **Enhetsregisteret (Brønnøysund)** | Bygget (åpent API, ingen nøkkel): org.nr. verifiseres ved bedriftsregistrering og kredittsøknad. Ukjente og konkurs-/avviklede virksomheter avvises. Er registeret utilgjengelig, går søknaden videre og markeres «ikke verifisert» i admin. Testet kun mot lokal etterligning, siden registeret ikke var nåbart fra testmiljøet |
 | **Kredittvurdering** | Manuell prosess med lenke til Brønnøysund. Ingen automatisk kredittopplysning |
 | **Google Analytics 4** | Bygget med samtykke og Consent Mode v2. Krever måle-ID |
 | **Klarna / forbrukerkreditt** | Ikke bygget. Forbrukerkreditt skal gå via godkjent ekstern leverandør |
@@ -101,9 +102,11 @@ Se [`MILJOVARIABLER.md`](MILJOVARIABLER.md). Minimum for lansering:
 | Databasetester (`npm run db:test`): RLS, lager, betaling, kreditt, varemottak, førpris, rate limit, søk, kostpris | 18 | **18 PASS** |
 | Samtidighetstest (8 parallelle kjøp av siste vare) | 1 | **PASS** |
 | E2E fullstack (Playwright): kundereise og administrasjon | 13 | **13 PASS** |
+| E2E integrasjoner mot lokale etterligninger av Stripe, Resend og Enhetsregisteret | 8 | **8 PASS** |
 | E2E røyktest: alle butikk-, konto- og adminsider | 31 | **31 PASS** |
 | E2E mobil (390 px) | 15 | **15 PASS** |
 | Demomodus (uten database): røyktest og mobil | 45 | **45 PASS** |
+| **Totalt E2E mot database (alle Playwright-tester)** | 67 | **67 PASS** |
 | TypeScript, ESLint, produksjonsbygg (begge moduser) | – | **PASS** |
 | `npm audit` (produksjonsavhengigheter) | – | **0 sårbarheter** |
 
@@ -118,20 +121,24 @@ Se [`MILJOVARIABLER.md`](MILJOVARIABLER.md). Minimum for lansering:
 | Handlekurv | **PASS** | Antall, fjerning, mengderabatt, rabattkode, frakt og MVA |
 | Betaling – feilhåndtering | **PASS** | Ordren markeres ikke som betalt, og lageret frigjøres |
 | Betaling – Stripe-webhook | **PASS** | Signert syntetisk hendelse, idempotens og avvisning av ugyldig signatur |
-| Betaling – Stripe Checkout-side | **NOT TESTED** | Krever ekte Stripe-testnøkler |
+| Betaling – start av Stripe Checkout (vår kode) | **PASS (mot etterligning)** | Økt opprettes med beløp som summerer til ordretotalen, ordren venter, lageret reserveres, og kunden som lander på bekreftelsessiden før webhook ser ikke «betalt» |
+| Betaling – Stripe Checkout-side hos Stripe | **NOT TESTED** | Krever ekte Stripe-testnøkler |
 | Betaling – Vipps | **NOT TESTED** | Krever Vipps-avtale og testnøkler |
 | Betaling – faktura (B2B) | **PASS** | Kredittramme, utestående og sperring |
 | Ordrebehandling | **PASS** | Status, forsendelse, sporing og notater |
-| Refusjon via Stripe | **NOT TESTED** | Krever Stripe-nøkler |
+| Refusjon via Stripe | **PASS (mot etterligning)** / **NOT TESTED (Stripe)** | Riktig kall (payment intent) sendes. Selve refusjonen hos Stripe er ikke testet |
 | Lageroppdatering | **PASS** | Reservasjon, trekk, frigjøring, utløp, samtidighet og varemottak |
 | Adminfunksjoner | **PASS** | Alle sider og hovedhandlinger |
 | Bildeopplasting (Supabase Storage) | **NOT TESTED** | Storage-API var ikke tilgjengelig i testmiljøet. Policyer er definert |
-| CSV-import og e-postkampanjeutsendelse | **NOT TESTED** | Implementert, ikke testet ende til ende |
+| CSV-import (leverandører og innkjøpspriser) | **PASS** | Inkludert feilrapportering for ukjent SKU og prishistorikk |
+| E-postkampanje og nyhetsbrev | **PASS (mot etterligning)** | Kun bekreftede abonnenter mottar, avmeldingslenke i hver e-post, dobbel bekreftelse og avmelding virker |
+| Utløpt Stripe-økt | **PASS** | Webhook `checkout.session.expired` frigjør lageret |
 | Mobilvisning | **PASS** | 15 sider uten horisontal overflyt |
-| E-postutsendelse | **PASS (logikk)** / **NOT TESTED (Resend)** | Maler og logging er verifisert. Faktisk sending krever nøkkel |
-| Passordtilbakestilling | **NOT TESTED** | Krever SMTP/Resend |
-| Kontosletting | **NOT TESTED** | Implementert (anonymisering etter bokføringsloven) |
-| Sikkerhet | **PASS** | RLS, rollebeskyttelse, funksjonsrettigheter, webhook-signatur, rate limiting og skjulte kostpriser |
+| E-postutsendelse | **PASS (mot etterligning)** / **NOT TESTED (Resend)** | Ordrebekreftelse, tilbakestilling, bekreftelse og kampanje sendes med riktig innhold. Levering via Resend og leveringsevne (SPF/DKIM) er ikke testet |
+| Passordtilbakestilling | **PASS (mot etterligning)** | E-post med lenke, nytt passord, innlogging, og lenken kan ikke gjenbrukes |
+| Kontosletting | **PASS** | Åpne ordre blokkerer, deretter slettes kontoen og ordre anonymiseres (bokføringsloven) |
+| Enhetsregister-verifisering | **PASS (mot etterligning)** | Ukjent org.nr. og konkurs avvises, aktiv virksomhet verifiseres og lagres |
+| Sikkerhet | **PASS** | RLS, rollebeskyttelse, funksjonsrettigheter, webhook-signatur, rate limiting, skjulte kostpriser og Content-Security-Policy (alle sider kjører uten CSP-brudd) |
 | Feilhåndtering | **PASS** | Feilsider, prisavvik, utsolgt og mislykket betaling |
 | Cron-jobber | **PASS** | Autorisasjon (401 uten nøkkel) og korrekte svar |
 
@@ -142,6 +149,7 @@ Se [`MILJOVARIABLER.md`](MILJOVARIABLER.md). Minimum for lansering:
 - Malersett fikk varekost 0 kr og DG på 100 %. Kost summeres nå fra komponentene.
 - Kostpris kunne leses via RPC. Funksjonen har nå tilgangsvakt (test T19).
 - Mobil: siden var bredere enn skjermen på produktsider og i headeren. Rettet, med regresjonstest.
+- Opprydding i tester feilet stille fordi fakturaer blokkerer sletting av bedrift (ON DELETE RESTRICT, som er riktig for regnskapsdata). Testene sletter nå fakturaer først.
 - Innloggingsgrensen per IP var for streng for delte nett (skoler). Hevet til 30 per 10 minutter per IP, med beholdt grense på 8 per e-post.
 
 ---
@@ -158,13 +166,13 @@ Se [`MILJOVARIABLER.md`](MILJOVARIABLER.md). Minimum for lansering:
 8. **Supabase:** opprett prosjekt i EU-region, kjør migrasjoner, opprett administrator og konfigurer redirect-URL-er.
 9. **Vercel:** miljøvariabler, domene og cron (merk begrensningen i Hobby-planen).
 10. **Faktura/kreditt:** hold `FEATURE_BUSINESS_INVOICE=false` til kredittvurdering, vilkår, KID, purring og regnskapsrutiner er på plass.
-11. Test resten av NOT TESTED-punktene i avsnitt 6 med ekte nøkler.
+11. Test resten av NOT TESTED-punktene i avsnitt 6 med ekte nøkler. Se `docs/LANSERING.md` for en ferdig sjekkliste med kommandoer.
 
 ---
 
 ## 8. Anbefalte forbedringer
 
-- Integrasjon mot Brønnøysundregistrene (oppslag og verifisering av org.nr. og navn ved bedriftsregistrering).
+- Rolle- og signaturrett-sjekk mot Brønnøysund (i dag verifiseres kun at virksomheten finnes og er aktiv).
 - Bring/PostNord-API: hentestedsvelger, fraktetiketter og automatisk sporingsstatus.
 - Fakturamodul med KID, PDF-generering, EHF og regnskapsintegrasjon (Fiken, Tripletex eller PowerOffice).
 - Handlekurv lagret på serveren for innloggede kunder (synk mellom enheter).
@@ -181,8 +189,8 @@ Se [`MILJOVARIABLER.md`](MILJOVARIABLER.md). Minimum for lansering:
 
 | Punkt | Vurdering |
 |---|---|
-| **Content-Security-Policy** | Ikke satt ennå (andre sikkerhetshoder er satt). Anbefales før lansering, med unntak for Stripe og GA. |
-| **Bedriftsregistrering** | En innlogget bruker kan registrere et gyldig, men ikke-verifisert org.nr. Dette gir kun tilgang til bedriftslevering. Kreditt krever manuell godkjenning. Anbefaling: BRREG-oppslag. |
+| **Content-Security-Policy** | Satt i produksjon (statisk, uten nonce, for å bevare rask lasting med statiske sider). `script-src` tillater `'unsafe-inline'` fordi Next.js trenger inline-skript for hydrering. Resten er strengt (kun egne ressurser, Supabase og GA, ingen rammer, ingen `object`, `form-action 'self'`). En strengere nonce-basert CSP krever at alle sider rendres dynamisk og er en bevisst avveining mot ytelse. |
+| **Bedriftsregistrering** | Org.nr. kontrolleres mot Enhetsregisteret. Er registeret utilgjengelig, godtas registreringen som «ikke verifisert» (vises i admin), og kreditt krever uansett manuell godkjenning. Verifiseringen sjekker ikke at brukeren faktisk representerer virksomheten. |
 | **Ansattrollen («staff»)** | Har bred tilgang til ordre og kundedata, men ikke til innstillinger, kreditt, roller eller logg. Gi rollen kun til betrodde personer. |
 | **Rate limiting** | Bruker Postgres når service role er satt. Ellers brukes en minnebasert fallback per serverinstans. |
 | **Service role-nøkkel** | Brukes kun på serveren. Må aldri legges i en `NEXT_PUBLIC_`-variabel. |

@@ -9,6 +9,7 @@ import { businessSchema, fieldErrors, formDataToObject } from "@/lib/validation"
 import { sendEmail } from "@/lib/email/send";
 import { emails } from "@/lib/email/templates";
 import { audit } from "@/lib/audit";
+import { BRREG_MESSAGES, lookupOrganization } from "@/lib/brreg";
 import type { ActionState } from "./types";
 
 const applicationSchema = businessSchema.extend({
@@ -34,6 +35,11 @@ export async function submitCreditApplication(_prev: ActionState, formData: Form
   const d = parsed.data;
   const admin = createAdminClient();
 
+  const brreg = await lookupOrganization(d.org_number);
+  if (brreg.status === "not_found" || brreg.status === "inactive") {
+    return { ok: false, message: BRREG_MESSAGES[brreg.status], fieldErrors: { org_number: BRREG_MESSAGES[brreg.status] } };
+  }
+
   const { data: pending } = await admin
     .from("credit_applications")
     .select("id")
@@ -57,6 +63,10 @@ export async function submitCreditApplication(_prev: ActionState, formData: Form
       phone: d.phone,
       billing_address: billing,
       delivery_address: delivery,
+      brreg_status: brreg.status,
+      brreg_name: brreg.name,
+      brreg_details: brreg.details,
+      brreg_checked_at: new Date().toISOString(),
       requested_limit_ore: d.requested_limit * 100,
       expected_monthly_ore: d.expected_monthly ? d.expected_monthly * 100 : null,
       message: d.message || null,
@@ -92,6 +102,11 @@ export async function registerBusiness(_prev: ActionState, formData: FormData): 
   const d = parsed.data;
   const admin = createAdminClient();
 
+  const brreg = await lookupOrganization(d.org_number);
+  if (brreg.status === "not_found" || brreg.status === "inactive") {
+    return { ok: false, message: BRREG_MESSAGES[brreg.status], fieldErrors: { org_number: BRREG_MESSAGES[brreg.status] } };
+  }
+
   const { data: existing } = await admin.from("companies").select("id").eq("org_number", d.org_number).maybeSingle();
   if (existing) {
     return { ok: false, message: "Bedriften er allerede registrert. Kontakt kundeservice for å bli lagt til som bruker." };
@@ -107,6 +122,9 @@ export async function registerBusiness(_prev: ActionState, formData: FormData): 
       phone: d.phone,
       billing_address: { line1: d.billing_line1, postal_code: d.billing_postal_code, city: d.billing_city, country: "NO" },
       delivery_address: d.delivery_line1 ? { line1: d.delivery_line1, postal_code: d.delivery_postal_code, city: d.delivery_city, country: "NO" } : null,
+      brreg_status: brreg.status,
+      brreg_name: brreg.name,
+      brreg_checked_at: new Date().toISOString(),
       created_by: user.id,
     })
     .select("id")

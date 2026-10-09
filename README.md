@@ -5,7 +5,8 @@ Spesialisert norsk nettbutikk for oljemaling, pensler, lerret og malermedium.
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · shadcn/ui · Supabase (PostgreSQL, Auth, Storage, RLS) · Stripe Checkout · Vipps (forberedt) · Resend · Vercel.
 
-> Sluttrapport med teststatus (PASS / FAIL / NOT TESTED), mangler og neste steg: [`docs/RAPPORT.md`](docs/RAPPORT.md)
+> Sluttrapport med teststatus (PASS / FAIL / NOT TESTED), mangler og neste steg: [`docs/RAPPORT.md`](docs/RAPPORT.md)  
+> Sjekkliste for det som gjenstår før lansering (kontoer, nøkler, avtaler): [`docs/LANSERING.md`](docs/LANSERING.md)
 
 ## Kom i gang
 
@@ -46,6 +47,7 @@ Uten miljøvariabler kjører butikken i **demomodus**: katalog, søk, produktsid
 | `npm run db:seed:generate` | Genererer `supabase/seed.sql` fra demodata i `src/lib/demo/` |
 | `npx tsx scripts/generate-images.ts` | Genererer SVG-illustrasjoner (plassholdere) |
 | `scripts/local-stack.sh` | Lett teststack uten Docker (PostgreSQL + GoTrue + PostgREST) |
+| `node tests/mocks/services.mjs` | Lokale etterligninger av Stripe, Resend og Enhetsregisteret for integrasjonstester |
 
 ## Arkitektur
 

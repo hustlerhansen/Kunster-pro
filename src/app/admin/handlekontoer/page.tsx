@@ -50,6 +50,9 @@ export default async function AdminCredit() {
                   Slå opp i Brønnøysund
                 </a>
                 <Badge variant={APPLICATION_STATUS[a.status]?.variant}>{APPLICATION_STATUS[a.status]?.label}</Badge>
+                <Badge variant={a.brreg_status === "verified" ? "success" : "warning"}>
+                  {a.brreg_status === "verified" ? `Verifisert i Enhetsregisteret: ${a.brreg_name}` : "Ikke verifisert (Enhetsregisteret utilgjengelig) – slå opp manuelt"}
+                </Badge>
                 <span className="text-muted-foreground">{formatDate(a.created_at, true)}</span>
               </div>
               <p className="mt-2 text-sm">
